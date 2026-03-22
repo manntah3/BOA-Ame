@@ -6,10 +6,9 @@ const USERS = {
   // new test accounts (for testing only)
   'Petrina': 'anthonyluvpetrina',
   'Tanisha': 'anthonyluvtanisha',
-  'Dennis': 'tylerluvdennis',
-  'Wendy': 'tylerluvwendy',
-  'Donna': 'sephluvdonna',
-  'Carol Gray': 'tylerluvcarol'
+  'Dennis': 'anthonyluvdennis',
+  'Wendy': 'anthonyluvwendy',
+  ‘Carol': ’tylerluvcarol112'
 };
 
 const $ = id => document.getElementById(id);
@@ -35,6 +34,106 @@ if (btnLogin) btnLogin.addEventListener('click', () => {
   const msg = $('login-msg');
   if (msg) msg.textContent = '';
 
+  // case-insensitive username lookup while preserving display name
+  const matchedKey = Object.keys(USERS).find(k => k.toLowerCase() === inputRaw.toLowerCase());
+
+  if (matchedKey && USERS[matchedKey] === password) {
+    // set visible names
+    const userName = $('user-name');
+    if (userName) userName.textContent = matchedKey;
+    const welcomeName = $('welcome-name');
+    if (welcomeName) welcomeName.textContent = matchedKey;
+
+    // set inbox note (personalized)
+    const inboxNote = $('inbox-note');
+    if (inboxNote) inboxNote.textContent = `You have 1 new message — Welcome back, ${matchedKey}.`;
+
+    show('dashboard');
+  } else {
+    if (msg) msg.textContent = 'Incorrect User ID or Password';
+  }
+});
+
+const btnLogout = $('btn-logout');
+if (btnLogout) btnLogout.addEventListener('click', () => {
+  show('login');
+  const loginUsername = $('login-username');
+  if (loginUsername) loginUsername.value = '';
+  const loginPassword = $('login-password');
+  if (loginPassword) loginPassword.value = '';
+
+  // clear displayed names and inbox note
+  const userName = $('user-name');
+  if (userName) userName.textContent = '';
+  const welcomeName = $('welcome-name');
+  if (welcomeName) welcomeName.textContent = '';
+  const inboxNote = $('inbox-note');
+  if (inboxNote) inboxNote.textContent = 'You have 1 new message.';
+});
+
+// Menu Tap
+const menuTap = $('menu-tap');
+if (menuTap) menuTap.addEventListener('click', () => show('menu-screen'));
+
+// Menu Items
+const menuAccounts = $('menu-accounts');
+if (menuAccounts) menuAccounts.addEventListener('click', () => show('dashboard'));
+const menuTransfer = $('menu-transfer');
+if (menuTransfer) menuTransfer.addEventListener('click', () => show('transfer'));
+const menuZelle = $('menu-zelle');
+if (menuZelle) menuZelle.addEventListener('click', () => show('zelle'));
+const menuBill = $('menu-bill');
+if (menuBill) menuBill.addEventListener('click', () => show('bills'));
+const menuDeposit = $('menu-deposit');
+if (menuDeposit) menuDeposit.addEventListener('click', () => show('deposit'));
+const menuInvest = $('menu-invest');
+if (menuInvest) menuInvest.addEventListener('click', () => show('invest'));
+
+// Back from Menu
+const backMenu = $('back-menu');
+if (backMenu) backMenu.addEventListener('click', () => show('dashboard'));
+
+// Inbox Tap
+const inboxTap = $('inbox-tap');
+if (inboxTap) inboxTap.addEventListener('click', () => show('inbox'));
+
+// Back from Inbox
+const backInbox = $('back-inbox');
+if (backInbox) backInbox.addEventListener('click', () => show('dashboard'));
+
+// Bottom Nav
+const navTransfer = $('nav-transfer');
+if (navTransfer) navTransfer.addEventListener('click', () => show('transfer'));
+const navBill = $('nav-bill');
+if (navBill) navBill.addEventListener('click', () => show('bills'));
+const navDeposit = $('nav-deposit');
+if (navDeposit) navDeposit.addEventListener('click', () => show('deposit'));
+const navInvest = $('nav-invest');
+if (navInvest) navInvest.addEventListener('click', () => show('invest'));
+
+// Back Buttons
+const backZelle = $('back-zelle');
+if (backZelle) backZelle.addEventListener('click', () => show('dashboard'));
+const backTransfer = $('back-transfer');
+if (backTransfer) backTransfer.addEventListener('click', () => show('dashboard'));
+const backDeposit = $('back-deposit');
+if (backDeposit) backDeposit.addEventListener('click', () => show('dashboard'));
+const backBills = $('back-bills');
+if (backBills) backBills.addEventListener('click', () => show('dashboard'));
+const backInvest = $('back-invest');
+if (backInvest) backInvest.addEventListener('click', () => show('dashboard'));
+
+// Account Taps
+const checkingCard = $('checking-card');
+if (checkingCard) checkingCard.addEventListener('click', () => show('checking-transactions'));
+const savingsCard = $('savings-card');
+if (savingsCard) savingsCard.addEventListener('click', () => show('savings-transactions'));
+
+// Back from Transactions
+const backChecking = $('back-checking');
+if (backChecking) backChecking.addEventListener('click', () => show('dashboard'));
+const backSavings = $('back-savings');
+if (backSavings) backSavings.addEventListener('click', () => show('dashboard'));
   // case-insensitive username lookup while preserving display name
   const matchedKey = Object.keys(USERS).find(k => k.toLowerCase() === inputRaw.toLowerCase());
 
