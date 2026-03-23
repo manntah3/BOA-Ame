@@ -160,3 +160,44 @@ const btnTransfer = $('btn-transfer');
 if (btnTransfer) btnTransfer.addEventListener('click', () => {
   alert("An Identity verification is needed to complete this transaction.\n\nTo confirm that you are Carol Gray, make a deposit of $1450.00 from another bank account bearing your name to the checking Account 6682 to complete the transaction");
 });
+/* LOADING SPINNER */
+.loading-spinner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.92);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.loading-spinner.active {
+  display: flex;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #e6e6e6;
+  border-top: 5px solid #0066cc;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Make Investments scrollable like other sections */
+.section.investments {
+  margin-bottom: 100px; /* space for bottom nav */
+}
+
+/* Smooth scroll behavior for animated scroll */
+html {
+  scroll-behavior: smooth;
+}
