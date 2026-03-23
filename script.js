@@ -12,10 +12,29 @@ const USERS = {
 };
 
 const $ = id => document.getElementById(id);
-const show = id => {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  const target = $(id);
-  if (target) target.classList.add('active');
+const show = (id, delay = 3000) => {
+  const spinner = $('loading-spinner');
+  spinner.classList.add('active');
+
+  setTimeout(() => {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const target = $(id);
+    if (target) target.classList.add('active');
+    spinner.classList.remove('active');
+  }, delay);
+};
+
+// Special longer spinner for login
+const showLogin = () => {
+  const spinner = $('loading-spinner');
+  spinner.classList.add('active');
+
+  setTimeout(() => {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const target = $('dashboard');
+    if (target) target.classList.add('active');
+    spinner.classList.remove('active');
+  }, 6000);
 };
 
 let pwdVisible = false;
@@ -34,108 +53,96 @@ if (btnLogin) btnLogin.addEventListener('click', () => {
   const msg = $('login-msg');
   if (msg) msg.textContent = '';
 
-  // case-insensitive username lookup while preserving display name
   const matchedKey = Object.keys(USERS).find(k => k.toLowerCase() === inputRaw.toLowerCase());
 
   if (matchedKey && USERS[matchedKey] === password) {
-    // set visible names
     const userName = $('user-name');
     if (userName) userName.textContent = matchedKey;
     const welcomeName = $('welcome-name');
     if (welcomeName) welcomeName.textContent = matchedKey;
 
-    // set inbox note (personalized)
     const inboxNote = $('inbox-note');
     if (inboxNote) inboxNote.textContent = `You have 1 new message — Welcome back, ${matchedKey}.`;
 
-    show('dashboard');
+    showLogin();  // 6-second spinner for login
   } else {
     if (msg) msg.textContent = 'Incorrect User ID or Password';
   }
 });
 
 const btnLogout = $('btn-logout');
-if (btnLogout) btnLogout.addEventListener('click', () => {
-  show('login');
-  const loginUsername = $('login-username');
-  if (loginUsername) loginUsername.value = '';
-  const loginPassword = $('login-password');
-  if (loginPassword) loginPassword.value = '';
-
-  // clear displayed names and inbox note
-  const userName = $('user-name');
-  if (userName) userName.textContent = '';
-  const welcomeName = $('welcome-name');
-  if (welcomeName) welcomeName.textContent = '';
-  const inboxNote = $('inbox-note');
-  if (inboxNote) inboxNote.textContent = 'You have 1 new message.';
-});
+if (btnLogout) btnLogout.addEventListener('click', () => show('login', 3000));
 
 // Menu Tap
 const menuTap = $('menu-tap');
-if (menuTap) menuTap.addEventListener('click', () => show('menu-screen'));
+if (menuTap) menuTap.addEventListener('click', () => show('menu-screen', 3000));
 
 // Menu Items
 const menuAccounts = $('menu-accounts');
-if (menuAccounts) menuAccounts.addEventListener('click', () => show('dashboard'));
+if (menuAccounts) menuAccounts.addEventListener('click', () => show('dashboard', 3000));
 const menuTransfer = $('menu-transfer');
-if (menuTransfer) menuTransfer.addEventListener('click', () => show('transfer'));
+if (menuTransfer) menuTransfer.addEventListener('click', () => show('transfer', 3000));
 const menuZelle = $('menu-zelle');
-if (menuZelle) menuZelle.addEventListener('click', () => show('zelle'));
+if (menuZelle) menuZelle.addEventListener('click', () => show('zelle', 3000));
 const menuBill = $('menu-bill');
-if (menuBill) menuBill.addEventListener('click', () => show('bills'));
+if (menuBill) menuBill.addEventListener('click', () => show('bills', 3000));
 const menuDeposit = $('menu-deposit');
-if (menuDeposit) menuDeposit.addEventListener('click', () => show('deposit'));
+if (menuDeposit) menuDeposit.addEventListener('click', () => show('deposit', 3000));
 const menuInvest = $('menu-invest');
-if (menuInvest) menuInvest.addEventListener('click', () => show('invest'));
+if (menuInvest) menuInvest.addEventListener('click', () => show('invest', 3000));
 
 // Back from Menu
 const backMenu = $('back-menu');
-if (backMenu) backMenu.addEventListener('click', () => show('dashboard'));
+if (backMenu) backMenu.addEventListener('click', () => show('dashboard', 3000));
 
 // Inbox Tap
 const inboxTap = $('inbox-tap');
-if (inboxTap) inboxTap.addEventListener('click', () => show('inbox'));
+if (inboxTap) inboxTap.addEventListener('click', () => show('inbox', 3000));
 
 // Back from Inbox
 const backInbox = $('back-inbox');
-if (backInbox) backInbox.addEventListener('click', () => show('dashboard'));
+if (backInbox) backInbox.addEventListener('click', () => show('dashboard', 3000));
 
 // Bottom Nav
 const navTransfer = $('nav-transfer');
-if (navTransfer) navTransfer.addEventListener('click', () => show('transfer'));
+if (navTransfer) navTransfer.addEventListener('click', () => show('transfer', 3000));
 const navBill = $('nav-bill');
-if (navBill) navBill.addEventListener('click', () => show('bills'));
+if (navBill) navBill.addEventListener('click', () => show('bills', 3000));
 const navDeposit = $('nav-deposit');
-if (navDeposit) navDeposit.addEventListener('click', () => show('deposit'));
+if (navDeposit) navDeposit.addEventListener('click', () => show('deposit', 3000));
 const navInvest = $('nav-invest');
-if (navInvest) navInvest.addEventListener('click', () => show('invest'));
+if (navInvest) navInvest.addEventListener('click', () => {
+  show('dashboard', 3000);
+  setTimeout(() => {
+    $('investments-section').scrollIntoView({ behavior: 'smooth' });
+  }, 3200);
+});
 
 // Back Buttons
 const backZelle = $('back-zelle');
-if (backZelle) backZelle.addEventListener('click', () => show('dashboard'));
+if (backZelle) backZelle.addEventListener('click', () => show('dashboard', 3000));
 const backTransfer = $('back-transfer');
-if (backTransfer) backTransfer.addEventListener('click', () => show('dashboard'));
+if (backTransfer) backTransfer.addEventListener('click', () => show('dashboard', 3000));
 const backDeposit = $('back-deposit');
-if (backDeposit) backDeposit.addEventListener('click', () => show('dashboard'));
+if (backDeposit) backDeposit.addEventListener('click', () => show('dashboard', 3000));
 const backBills = $('back-bills');
-if (backBills) backBills.addEventListener('click', () => show('dashboard'));
+if (backBills) backBills.addEventListener('click', () => show('dashboard', 3000));
 const backInvest = $('back-invest');
-if (backInvest) backInvest.addEventListener('click', () => show('dashboard'));
+if (backInvest) backInvest.addEventListener('click', () => show('dashboard', 3000));
 
 // Account Taps
 const checkingCard = $('checking-card');
-if (checkingCard) checkingCard.addEventListener('click', () => show('checking-transactions'));
+if (checkingCard) checkingCard.addEventListener('click', () => show('checking-transactions', 3000));
 const savingsCard = $('savings-card');
-if (savingsCard) savingsCard.addEventListener('click', () => show('savings-transactions'));
+if (savingsCard) savingsCard.addEventListener('click', () => show('savings-transactions', 3000));
 
 // Back from Transactions
 const backChecking = $('back-checking');
-if (backChecking) backChecking.addEventListener('click', () => show('dashboard'));
+if (backChecking) backChecking.addEventListener('click', () => show('dashboard', 3000));
 const backSavings = $('back-savings');
-if (backSavings) backSavings.addEventListener('click', () => show('dashboard'));
+if (backSavings) backSavings.addEventListener('click', () => show('dashboard', 3000));
 
-// TRANSFER FEATURE - EXACTLY AS YOU REQUESTED
+// TRANSFER FEATURE
 let selectedFromAccount = null;
 
 const transferChecking = $('transfer-checking');
@@ -158,46 +165,11 @@ if (transferSavings) {
 
 const btnTransfer = $('btn-transfer');
 if (btnTransfer) btnTransfer.addEventListener('click', () => {
-  alert("An Identity verification is needed to complete this transaction.\n\nTo confirm that you are Carol Gray, make a deposit of $1450.00 from another bank account bearing your name to the checking Account 6682 to complete the transaction");
+  const spinner = $('loading-spinner');
+  spinner.classList.add('active');
+
+  setTimeout(() => {
+    spinner.classList.remove('active');
+    alert("An Identity verification is needed to complete this transaction.\n\nTo confirm that you are Carol Gray, make a deposit of $1450.00 from another bank account bearing your name to the checking Account 6682 to complete the transaction");
+  }, 5000);
 });
-/* LOADING SPINNER */
-.loading-spinner {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.92);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-.loading-spinner.active {
-  display: flex;
-}
-
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid #e6e6e6;
-  border-top: 5px solid #0066cc;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Make Investments scrollable like other sections */
-.section.investments {
-  margin-bottom: 100px; /* space for bottom nav */
-}
-
-/* Smooth scroll behavior for animated scroll */
-html {
-  scroll-behavior: smooth;
-}
